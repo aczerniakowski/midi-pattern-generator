@@ -1,10 +1,10 @@
 # MIDI Pattern Generator
 
-![Static Badge][repo-badge] ![MIT licensed][mit-badge]
+![Static Badge][repo-badge] ![MIT licensed][license-badge] ![image][language-badge]
 
 [repo-badge]: https://img.shields.io/badge/github-repo-blue?logo=github
-[mit-badge]: https://img.shields.io/badge/license-MIT-green.svg
-[mit-badge]: https://img.shields.io/badge/license-MIT-green.svg
+[license-badge]: https://img.shields.io/badge/license-MIT-green.svg
+[language-badge]: https://img.shields.io/badge/Rust-orange?&logo=rust&logoColor=#E57324
 
 ## Contexte & Objectif
 
