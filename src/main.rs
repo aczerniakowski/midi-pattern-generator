@@ -16,6 +16,17 @@ fn main() {
     println!("~~ Midi Pattern Generator ~~");
     println!("Final Project CS50");
     println!("Language : Rust");
-    let scale: Vec<i32> = notes_in_scale(60, ScaleType::Minor);
-    println!("Gamme générée : {:?}", scale);
+    
+    // Étape 1 : définition des paramètres d’exécution (temporaire, sans CLI)
+    let root_note: i32 = 60; // C4 en midi
+    let scale_minor_type: ScaleType = ScaleType::Minor; // Gamme mineure
+    let scale_major_type: ScaleType = ScaleType::Major; // Gamme majeure
+
+    // Étape 2 : génération de la logique musicale
+    let scale_minor: Vec<i32> = notes_in_scale(root_note, scale_minor_type);
+    let scale_major: Vec<i32> = notes_in_scale(root_note, scale_major_type);
+
+    // Étape 3 : sortie utilisateur (debug / validation)
+    println!("Gamme {:?} générée à partir de la note {:?}: {:?}", scale_minor_type, root_note, scale_minor);
+    println!("Gamme {:?} générée à partir de la note {:?}: {:?}", scale_major_type, root_note, scale_major);
     }
