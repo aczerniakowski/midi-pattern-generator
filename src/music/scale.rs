@@ -1,7 +1,7 @@
-//! Logique musicale du projet.
+//! Logique musicale du projet : gammes
 //!
 //! Ce module contient les structures et fonctions liées
-//! aux gammes, accords et patterns musicaux.
+//! aux gammes.
 
 /// Représente une gamme musicale.
 ///
