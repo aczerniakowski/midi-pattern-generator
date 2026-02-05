@@ -7,7 +7,7 @@
 ///
 /// Un accord est défini par une série d'intervalles
 /// à partir d'une note racine et un type d'accord.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ChordType {
     Major,
     Minor,

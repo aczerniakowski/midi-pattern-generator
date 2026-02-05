@@ -106,8 +106,10 @@ Projet réalisé par **Alexandre Czerniakowski**, ingénieur logiciel embarqué 
 ## État du projet
 
 * ✔ Projet Rust initialisé et compilable
-* ✔ Architecture modulaire définie
+* ✔ Architecture modulaire définie (`music/scale`, `music/chord`, `music/pattern`)
 * ✔ Génération de gammes majeures et mineures
 * ✔ Génération d’accords majeurs et mineurs
-* ✔ Tests unitaires pour la logique musicale
-* 🔜 Prochaine étape : génération de patterns musicaux
+* ✔ Modélisation événementielle des patterns (temps discret, durée explicite)
+* ✔ Tests unitaires de base pour la logique musicale
+* 🔄 En cours : API idiomatique Rust pour `PatternEvent` (constructeur associé, validations)
+* 🔜 Prochaine étape : API du `Pattern` (ajout contrôlé d’événements)
