@@ -1,48 +1,65 @@
 //! MIDI Pattern Generator
 //!
-//! Ce programme est le point d’entrée du projet *MIDI Pattern Generator*.
-//! Il orchestre les différentes étapes du traitement :
+//! Point d’entrée du projet *MIDI Pattern Generator*.
 //!
-//! 1. Lecture des paramètres utilisateur (CLI)
-//! 2. Génération de la logique musicale (gammes, accords, patterns)
-//! 3. Export du résultat sous forme de fichier MIDI
+//! Rôle de `main.rs` :
+//! - orchestrer le flux global
+//! - appeler la logique musicale
+//! - afficher des résultats de validation (debug)
 //!
-//! La logique métier est volontairement séparée dans des modules dédiés
-//! afin de garder `main.rs` simple, lisible et centré sur le flux global.
+//! Toute la logique métier est isolée dans les modules dédiés.
+
 mod music;
 
 use music::scale::{notes_in_scale, ScaleType};
 use music::chord::{notes_in_chord, ChordType};
+
 fn main() {
-    println!("~~ Midi Pattern Generator ~~");
+    println!("~~ MIDI Pattern Generator ~~");
     println!("Final Project CS50");
     println!("Language : Rust");
-    
-    // Etape 1 : Scale
-    // Étape 1.1 : définition des paramètres d’exécution (temporaire, sans CLI)
-    let root_note: i32 = 60; // C4 en midi
-    let scale_minor_type: ScaleType = ScaleType::Minor; // Gamme mineure
-    let scale_major_type: ScaleType = ScaleType::Major; // Gamme majeure
 
-    // Étape 1.2 : génération de la logique musicale
-    let scale_minor: Vec<i32> = notes_in_scale(root_note, scale_minor_type);
-    let scale_major: Vec<i32> = notes_in_scale(root_note, scale_major_type);
+    // Paramètres communs (temporaires, sans CLI)
+    let root_note: i32 = 60; // C4 en MIDI
 
-    // Étape 1.3 : sortie utilisateur (debug / validation)
-    println!("Gamme {:?} générée à partir de la note {:?}: {:?}", scale_minor_type, root_note, scale_minor);
-    println!("Gamme {:?} générée à partir de la note {:?}: {:?}", scale_major_type, root_note, scale_major);
-    
-    // Etape 2 : Chord
-    // Étape 1.1 : définition des paramètres d’exécution (temporaire, sans CLI)
-    let root: i32 = 60; // C4 en midi
-    let minor_type: ChordType = ChordType::Minor; // Gamme mineure
-    let major_type: ChordType = ChordType::Major; // Gamme majeure
+    // =========================
+    // Étape 1 : Gammes
+    // =========================
+    let scale_minor = notes_in_scale(root_note, ScaleType::Minor);
+    let scale_major = notes_in_scale(root_note, ScaleType::Major);
 
-    // Étape 1.2 : génération de la logique musicale
-    let chord_minor: Vec<i32> = notes_in_chord(root_note, minor_type);
-    let chord_major: Vec<i32> = notes_in_chord(root_note, major_type);
+    println!(
+        "Gamme {:?} à partir de {} : {:?}",
+        ScaleType::Minor,
+        root_note,
+        scale_minor
+    );
+    println!(
+        "Gamme {:?} à partir de {} : {:?}",
+        ScaleType::Major,
+        root_note,
+        scale_major
+    );
 
-    // Étape 1.3 : sortie utilisateur (debug / validation)
-    println!("Accord {:?} générée à partir de la note {:?}: {:?}", minor_type, root, chord_minor);
-    println!("Accord {:?} générée à partir de la note {:?}: {:?}", major_type, root, chord_major);
-    }
+    // =========================
+    // Étape 2 : Accords
+    // =========================
+    let chord_minor = notes_in_chord(root_note, ChordType::Minor);
+    let chord_major = notes_in_chord(root_note, ChordType::Major);
+
+    println!(
+        "Accord {:?} à partir de {} : {:?}",
+        ChordType::Minor,
+        root_note,
+        chord_minor
+    );
+    println!(
+        "Accord {:?} à partir de {} : {:?}",
+        ChordType::Major,
+        root_note,
+        chord_major
+    );
+
+    // Étape 3 (à venir) : Patterns
+    // Étape 4 (à venir) : Export MIDI
+}

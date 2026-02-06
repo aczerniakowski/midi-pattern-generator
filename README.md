@@ -111,5 +111,7 @@ Projet réalisé par **Alexandre Czerniakowski**, ingénieur logiciel embarqué 
 * ✔ Génération d’accords majeurs et mineurs
 * ✔ Modélisation événementielle des patterns (temps discret, durée explicite)
 * ✔ Tests unitaires de base pour la logique musicale
-* 🔄 En cours : API idiomatique Rust pour `PatternEvent` (constructeur associé, validations)
-* 🔜 Prochaine étape : API du `Pattern` (ajout contrôlé d’événements)
+* ✔ Constructeur idiomatique Rust pour `PatternEvent` avec validation et erreurs typées
+* ✔ Tests unitaires couvrant les cas valides et invalides des événements
+* 🔄 En cours : API du `Pattern` (gestion de la taille, ajout contrôlé d’événements)
+* 🔜 Prochaine étape : règles de chevauchement et cohérence temporelle globale

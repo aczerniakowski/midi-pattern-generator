@@ -3,6 +3,10 @@
 //! Ce module contient les structures et fonctions liées
 //! aux patterns.
 use crate::music::chord::ChordType;
+
+pub const MIDI_NOTE_MAX: i32 = 127;
+pub const MIDI_NOTE_MIN: i32 = 0;
+
 /// Représente un évènement à partir d'un accord.
 ///
 /// Un évènement est défini par une note root, un type d'accord,
@@ -14,56 +18,104 @@ struct PatternEvent {
     start: i32,
     duration: i32,
 }
-/// Représente un pattern à partir d'évènements et d'une taille.
+/// Représente les erreurs lors de la création d'un évènement.
 ///
-/// Un pattern est défini par un suite d'évènements
-struct Pattern{
-    size: u8,
-    sequence:Vec<PatternEvent>,
+/// Plusieurs erreurs sont capturées : note invalide, début invalide
+/// et durée invalide.
+#[derive(Debug, PartialEq)]
+pub enum PatternEventError{
+    InvalidRoot,
+    InvalidStart,
+    InvalidDuration,
 }
-/// Génère un évènement.
+/// Génère un évènement d'un pattern.
 ///
 /// # Arguments
 ///
-/// * `root` - Note racine en valeur MIDI (ex: 60 = C4)
+/// * `root` - Note racine en valeur MIDI (ex: 60 = C4) 0 <= root <= 127
 /// * `chord` - Type d'accord (majeur ou mineur)
-/// * `start` - Début de l'évènement
-/// * `duration` - Durée de l'évènement
+/// * `start` - Début de l'évènement >= 0
+/// * `duration` - Durée de l'évènement > 0
+///
 /// # Retour
 ///
-/// Une strcture contenant un évènement.
+/// L'évènement crée (PatternEvent) ou un message d'erreur (PatternEventError)
 ///
-/// # Exemple
-///
-/// ```
-/// use midi_pattern_generator::music::pattern::{create_event, PatternEvent};
-///
-/// let event = create_event(60, ChordType::Major, 0, 1);
-/// assert_eq!(event, PatternEvent {root:60, chord:ChordType::Major, start:0, duration:1});
-/// ```
-fn create_event(root: i32, chord: ChordType, start: i32, duration: i32) -> PatternEvent {
-    // Associe à intervals le vecteur representant les intervalles
-    // pour l'accord 'chord' et la note 'root' voulue
-    let pattern_tmp: PatternEvent = PatternEvent {root:root, chord:chord, start:start, duration:duration};
-    return pattern_tmp;
+
+impl PatternEvent{
+    fn new(root:i32, chord: ChordType, start: i32, duration: i32) -> Result<Self, PatternEventError>
+    {
+        if root > MIDI_NOTE_MAX || root < MIDI_NOTE_MIN
+        {
+            return Err(PatternEventError::InvalidRoot);
+        }
+        if start < 0
+        {
+            return Err(PatternEventError::InvalidStart);
+        }
+        if duration <= 0
+        {
+            return Err(PatternEventError::InvalidDuration);
+        }
+        Ok(Self {root, chord, start, duration})
+    }
+    // Getters si besoin
+    fn root(&self) -> i32 { self.root }
+    fn start(&self) -> i32 { self.start }
+    fn duration(&self) -> i32 { self.duration }
 }
+/// Représente un pattern à partir d'évènements et d'une taille.
+///
+/// Un pattern est défini par un suite d'évènements
+// struct Pattern{
+//     size: u8,
+//     sequence:Vec<PatternEvent>,
+// }
 
 #[cfg(test)]
 mod tests {
-    //! Tests unitaires pour la génération des patterns.
+    //! Tests unitaires pour la génération d'évènements.
     //!
-    //! Ces tests vérifient que les fonctions du module `chord`
+    //! Ces tests vérifient que les fonctions du module `pattern`
     //! produisent des résultats musicaux corrects pour des cas simples.
     use crate::music::chord::ChordType;
     use crate::music::pattern::PatternEvent;
-    use crate::music::pattern::create_event;
+    use crate::music::pattern::PatternEventError;
+    use crate::music::pattern::MIDI_NOTE_MAX;
     #[test]
-    fn create_event_returns_correct_event() 
+    fn new_ok_when_parameters_are_valid() 
     {
-        let root: i32 = 60; // C4 en midi
-        let minor: ChordType = ChordType::Minor;
-        let start: i32 = 0;
-        let duration: i32 = 1;
-        assert_eq!(create_event(root, minor, start, duration), PatternEvent {root:60, chord:ChordType::Minor, start:0, duration:1});
+        let ev = PatternEvent::new(60, ChordType::Major, 0, 480)
+        .expect("should be valid");
+
+        assert_eq!(60, ev.root());
+        assert_eq!(0, ev.start());
+        assert_eq!(480, ev.duration());
+    }
+    #[test]
+    fn new_nok_when_root_is_negative()
+    {
+        let ev = PatternEvent::new(-1,ChordType::Major, 0, 480);
+        assert_eq!(Err(PatternEventError::InvalidRoot), ev);
+    }
+    #[test]
+    fn new_nok_when_root_is_too_high()
+    {
+        let ev = PatternEvent::new(MIDI_NOTE_MAX + 1,ChordType::Major, 0, 480);
+        assert_eq!(Err(PatternEventError::InvalidRoot), ev);
+    }
+    #[test]
+    fn new_nok_when_start_is_negative()
+    {
+        let ev = PatternEvent::new(60,ChordType::Major, -1, 480);
+        assert_eq!(Err(PatternEventError::InvalidStart), ev);
+    }
+    #[test]
+    fn new_nok_when_duration_is_not_valid()
+    {
+        let ev_neg = PatternEvent::new(60,ChordType::Major, 0, -1);
+        let ev_null = PatternEvent::new(60,ChordType::Major, 0, 0);
+        assert_eq!(Err(PatternEventError::InvalidDuration), ev_neg);
+        assert_eq!(Err(PatternEventError::InvalidDuration), ev_null);
     }
 }
