@@ -13,6 +13,7 @@ mod music;
 
 use music::scale::{notes_in_scale, ScaleType};
 use music::chord::{notes_in_chord, ChordType};
+use music::pattern::{Pattern, PatternEvent};
 
 fn main() {
     println!("~~ MIDI Pattern Generator ~~");
@@ -60,6 +61,23 @@ fn main() {
         chord_major
     );
 
-    // Étape 3 (à venir) : Patterns
+    // =========================
+    // Étape 3 : Patterns
+    // =========================
+    let first_note: i32 = 61;
+    let start: i32 = 0;
+    let duration: i32 = 2;
+    let chord_type: ChordType = ChordType::Major;
+    let ev = PatternEvent::new(first_note, chord_type, start, duration).unwrap();
+    println!(
+        "Evènement {:?}",
+        ev
+    );
+    let mut pattern = Pattern::new(16).unwrap();
+    pattern.add_event(ev).unwrap();
+    println!(
+        "Pattern {:?}",
+        pattern
+    );
     // Étape 4 (à venir) : Export MIDI
 }
