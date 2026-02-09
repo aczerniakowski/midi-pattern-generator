@@ -113,5 +113,9 @@ Projet réalisé par **Alexandre Czerniakowski**, ingénieur logiciel embarqué 
 * ✔ `PatternEvent` avec constructeur sécurisé et erreurs typées
 * ✔ `Pattern` avec taille fixe et état initial toujours valide
 * ✔ Ajout contrôlé d’événements (bornes temporelles, non-chevauchement)
-* ✔ Tests unitaires couvrant les cas valides et invalides des patterns
-* 🔜 Prochaine étape : tests métier plus complexes et patterns musicaux réalistes
+* ✔ Tests métier :
+
+  * patterns pleins (4 accords de durée égale)
+  * patterns partiels (silence autorisé)
+  * événement se terminant exactement à la fin du pattern
+* 🔜 Prochaine étape : génération automatique de patterns musicaux

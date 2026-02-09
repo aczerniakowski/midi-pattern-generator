@@ -120,6 +120,14 @@ impl Pattern{
         self.sequence.push(event);
         Ok(())
     }
+    pub fn event_count(&self) -> usize
+    {
+        self.sequence.len()
+    }
+    pub fn is_empty(&self) -> bool
+    {
+        self.sequence.len()==0
+    }
 }
 
 // Fonctions supplémentaires
@@ -202,5 +210,50 @@ mod tests {
         pattern.add_event(ev1).unwrap();
         let res2 = pattern.add_event(ev2);
         assert_eq!(Err(PatternError::InvalidEventOverlap), res2);
+    }
+    #[test]
+    fn pattern_accepts_four_chords_of_equal_duration() {
+        let mut pattern= Pattern::new(16).unwrap();
+        let root: i32 = 60;
+        let chord: ChordType = ChordType::Minor;
+        let duration: i32 = 4;
+        let starts: [i32; 4] = [0,4,8,12];
+        for start in starts
+        {
+            let ev =PatternEvent::new(root,chord,start,duration).unwrap();
+            let result=pattern.add_event(ev);
+            assert!(result.is_ok());
+        }
+        assert_eq!(pattern.event_count(), 4);
+    }
+    #[test]
+    fn pattern_allows_silence() {
+        let mut pattern= Pattern::new(16).unwrap();
+        let root: i32 = 60;
+        let chord: ChordType = ChordType::Minor;
+        let duration: i32 = 4;
+        let starts: [i32; 2] = [0,8];
+        assert!(pattern.is_empty());
+        for start in starts
+        {
+            let ev =PatternEvent::new(root,chord,start,duration).unwrap();
+            let result=pattern.add_event(ev);
+            assert!(result.is_ok());
+        }
+        assert_eq!(pattern.event_count(), 2);
+    }
+    #[test]
+    fn event_ending_at_pattern_size_is_valid()
+    {
+        let mut pattern= Pattern::new(16).unwrap();
+        let root: i32 = 60;
+        let chord: ChordType = ChordType::Minor;
+        let duration: i32 = 16;
+        let start: i32 = 0;
+        assert!(pattern.is_empty());
+        let ev = PatternEvent::new(root,chord,start,duration).unwrap();
+        let result = pattern.add_event(ev);
+        assert!(result.is_ok());
+        assert_eq!(pattern.event_count(),1);
     }
 }
